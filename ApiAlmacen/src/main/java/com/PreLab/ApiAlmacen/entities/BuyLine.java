@@ -18,11 +18,11 @@ public class BuyLine {
     private Integer quantity;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_id")
+    @JoinColumn(name = "product_id")
     private Product product;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_id_buyer")
+    @JoinColumn(name = "buy_id")
     private Buy buy;
 
 

@@ -16,4 +16,10 @@ public class LowHigh {
     private Date date;
     @Column
     private String reason;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="product_id")
+    private Product productLH;
+
+
 }

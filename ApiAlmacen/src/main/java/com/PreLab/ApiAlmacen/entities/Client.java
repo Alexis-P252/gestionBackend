@@ -2,6 +2,8 @@ package com.PreLab.ApiAlmacen.entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Client {
     @Id
@@ -16,4 +18,8 @@ public class Client {
 
     @Column
     private Float debt;
+
+    @OneToMany(mappedBy = "client")
+    private List<Sale> sales;
+
 }

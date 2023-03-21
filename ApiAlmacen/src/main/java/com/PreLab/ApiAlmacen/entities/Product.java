@@ -22,11 +22,9 @@ public class Product {
     private String image;
     @Column
     private Boolean visible;
-    @OneToMany
-    @JoinColumn(name = "fk_id_selline)")
+    @OneToMany(mappedBy = "product")
     private List<SellLine> sellLine;
-    @OneToMany
-    @JoinColumn(name = "fk_id")
+    @OneToMany(mappedBy = "productLH")
     private List<LowHigh> lowHigh;
 
 }
