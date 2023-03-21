@@ -24,7 +24,7 @@ public class Buy {
     private List<BuyLine> buyLine;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_id")
+    @JoinColumn(name = "suplier_id")
     private Suplier suplier;
 
 }

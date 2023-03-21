@@ -19,12 +19,12 @@ public class Product {
     @Column
     private Integer stock;
     @Column
-    private Long image;
+    private String image;
     @Column
     private Boolean visible;
-    @OneToMany
+    @OneToMany(mappedBy = "product")
     private List<SellLine> sellLine;
-    @OneToMany
+    @OneToMany(mappedBy = "productLH")
     private List<LowHigh> lowHigh;
 
 }

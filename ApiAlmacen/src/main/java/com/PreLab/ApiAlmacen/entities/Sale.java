@@ -19,4 +19,9 @@ public class Sale {
 
     @Column
     private String paymentMethod;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "client_id")
+    private Client client;
+
 }

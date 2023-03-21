@@ -2,19 +2,24 @@ package com.PreLab.ApiAlmacen.entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
-@Table(name = "suplier")
-public class Suplier {
+public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
     private String name;
+
     @Column
-    private Number phoneNumber;
+    private String phoneNumber;
+
     @Column
-    private String address;
-    @Column
-    private String Long;
+    private Float debt;
+
+    @OneToMany(mappedBy = "client")
+    private List<Sale> sales;
+
 }

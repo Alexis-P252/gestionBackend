@@ -3,18 +3,17 @@ package com.PreLab.ApiAlmacen.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "suplier")
-public class Suplier {
+public class Offer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
-    private String name;
+    private String title;
+
     @Column
-    private Number phoneNumber;
+    private String description;
+
     @Column
-    private String address;
-    @Column
-    private String Long;
+    private boolean visible;
 }
