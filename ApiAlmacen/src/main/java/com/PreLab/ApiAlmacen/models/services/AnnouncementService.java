@@ -24,9 +24,7 @@ public class AnnouncementService implements IAnnouncementService {
     public Announcement save(Announcement user) {return announcementDao.save(user);}
 
     @Override
-    public void deleteById(Long id) {
-        announcementDao.deleteById(id);
-    }
+    public void deleteById(Long id) {announcementDao.deleteById(id);}
 
 
 

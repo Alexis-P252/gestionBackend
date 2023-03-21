@@ -1,12 +1,13 @@
 package com.PreLab.ApiAlmacen.controllers;
 
+import com.PreLab.ApiAlmacen.entities.Announcement;
 import com.PreLab.ApiAlmacen.entities.Offer;
-import com.PreLab.ApiAlmacen.models.services.IOfferService;
-import lombok.Data;
+import com.PreLab.ApiAlmacen.models.services.IAnnouncementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -17,25 +18,22 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
- public class OfferControllers {
+@RequestMapping("/announcement")
+public class AnnouncementController {
 
     @Autowired
-    private IOfferService offerService;
+    IAnnouncementService iAnnouncementService;
 
-    @GetMapping("/offers")
-    public List<Offer> findAll(){
-        return offerService.findAll();
-    }
+    @GetMapping("/")
+    public List<Announcement> findAll(){return iAnnouncementService.findAll();}
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findById(@PathVariable(value = "id") Long id){
 
-    @GetMapping("/offers/{id}")
-    public ResponseEntity<?> findById(@PathVariable(value="id") Long id) {
-
-        Offer offer = null;
+        Announcement announcement = null;
         Map<String,Object> response = new HashMap<>();
         try {
-            offer = offerService.findById(id);
+            announcement = iAnnouncementService.findById(id);
 
         } catch( DataAccessException e) {
             response.put("msg","Error with access to database");
@@ -44,20 +42,19 @@ import java.util.Map;
 
         }
 
-        if(offer == null) {
-            response.put("msg","There is no offer with id = ".concat(id.toString()));
+        if(announcement == null) {
+            response.put("msg","There is no announcement with id = ".concat(id.toString()));
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
 
         }
 
-        return new ResponseEntity<Offer>(offer, HttpStatus.OK);
-
+        return new ResponseEntity<Announcement>( announcement, HttpStatus.OK);
     }
 
-    @PostMapping("/offer")
-    public ResponseEntity<?> create(@RequestBody Offer cliente, BindingResult result) {
+    @PostMapping("/newAnnouncement")
+    public ResponseEntity<?> create(@RequestBody Announcement announcement, BindingResult result) {
 
-        Offer newOffer = null;
+        Announcement newAnnouncement = null;
         Map<String,Object> response = new HashMap<>();
 
         if(result.hasErrors()){
@@ -67,65 +64,65 @@ import java.util.Map;
                 errors.add("In the field: " + err.getField() + " - " +err.getDefaultMessage());
             }
             response.put("errors", errors);
-            response.put("msg", "Error in validation offer");
+            response.put("msg", "Error in validation announcement");
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.BAD_REQUEST);
 
         }
 
         try {
-            newOffer = offerService.save(cliente);
+            newAnnouncement = iAnnouncementService.save(announcement);
         }catch(DataAccessException e) {
-            response.put("msg","Error when trying to insert an offer");
+            response.put("msg","Error when trying to insert an annoucement");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        response.put("msg", "Offer created succesfully");
-        response.put("offer", newOffer);
+        response.put("msg", "Annoucement created succesfully");
+        response.put("offer", newAnnouncement);
         return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@RequestBody Announcement announcement,@PathVariable(value="id")Long id ) {
 
-    @PutMapping("/offers/{id}")
-    public ResponseEntity<?> update(@RequestBody Offer offer,@PathVariable(value="id")Long id ) {
-
-        Offer currentOffer = offerService.findById(id);
+        Announcement currentAnnoucement = iAnnouncementService.findById(id);
 
         Map<String,Object> response = new HashMap<>();
 
-        if(currentOffer == null) {
-            response.put("msg","There is no user with id = ".concat(id.toString()));
+        if(currentAnnoucement == null) {
+            response.put("msg","There is no announcement with id = ".concat(id.toString()));
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
         }
 
-        currentOffer.setTitle(offer.getTitle());
-        currentOffer.setDescription(offer.getDescription());
-        currentOffer.setVisible(offer.getVisible());
+        currentAnnoucement.setTitle(announcement.getTitle());
+        currentAnnoucement.setDescription(announcement.getDescription());
 
         try {
-            currentOffer = offerService.save(currentOffer);
+            currentAnnoucement = iAnnouncementService.save(currentAnnoucement);
         }catch(DataAccessException e) {
-            response.put("msg","Error trying to modify user");
+            response.put("msg","Error trying to modify announcement");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        response.put("msg", "Offer updated successfully");
-        response.put("offer", currentOffer);
+        response.put("msg", "Announcement updated successfully");
+        response.put("offer", currentAnnoucement);
         return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/offers/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable(value="id") Long id) {
 
         Map<String,Object> response = new HashMap<>();
 
-        if(offerService.findById(id) != null ){
-            offerService.deleteById(id);
-            response.put("msg","Offer successfully removed");
-            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
+        try {
+            iAnnouncementService.deleteById(id);
 
-        }else{
-            response.put("msg","Error trying to delete offer");
+        }catch(DataAccessException e) {
+            response.put("msg","Error trying to delete announcement");
+            response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        response.put("msg", "Announcement successfully removed");
+        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
 
     }
+
 }
