@@ -1,10 +1,12 @@
 package com.PreLab.ApiAlmacen.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.List;
 
 @Entity
+@Data
 @Table(name = "product")
 public class Product {
     @Id

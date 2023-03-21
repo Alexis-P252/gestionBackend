@@ -2,8 +2,10 @@ package com.PreLab.ApiAlmacen.entities;
 
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
+@Data
 @Table(name = "sellLine")
 public class SellLine {
     @Id

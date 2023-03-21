@@ -1,8 +1,10 @@
 package com.PreLab.ApiAlmacen.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
+@Data
 @Table(name = "suplier")
 public class Suplier {
     @Id

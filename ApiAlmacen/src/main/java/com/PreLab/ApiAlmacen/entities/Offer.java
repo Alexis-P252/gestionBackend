@@ -1,8 +1,10 @@
 package com.PreLab.ApiAlmacen.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
+@Data
 public class Offer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
