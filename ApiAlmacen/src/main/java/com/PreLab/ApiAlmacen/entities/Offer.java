@@ -1,9 +1,10 @@
 package com.PreLab.ApiAlmacen.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
-public class Offer {
+@Data public class Offer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,5 +16,5 @@ public class Offer {
     private String description;
 
     @Column
-    private boolean visible;
+    private Boolean visible;
 }
