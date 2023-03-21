@@ -2,11 +2,13 @@ package com.PreLab.ApiAlmacen.entities;
 
 import jakarta.persistence.*;
 import lombok.Cleanup;
+import lombok.Data;
 import org.hibernate.engine.internal.Cascade;
 
 import java.io.Serializable;
 
 @Entity
+@Data
 @Table(name = "buyLine")
 public class BuyLine {
 

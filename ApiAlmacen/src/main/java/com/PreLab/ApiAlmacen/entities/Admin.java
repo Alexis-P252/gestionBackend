@@ -3,10 +3,12 @@ package com.PreLab.ApiAlmacen.entities;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.Date;
 
 @Entity
+@Data
 public class Admin {
 
     @Id
