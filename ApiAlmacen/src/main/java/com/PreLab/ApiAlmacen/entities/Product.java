@@ -2,7 +2,6 @@ package com.PreLab.ApiAlmacen.entities;
 
 import jakarta.persistence.*;
 
-import java.util.Base64;
 import java.util.List;
 
 @Entity
@@ -20,12 +19,14 @@ public class Product {
     @Column
     private Integer stock;
     @Column
-    private Base64 image;
+    private String image;
     @Column
     private Boolean visible;
     @OneToMany
+    @JoinColumn(name = "fk_id_selline)")
     private List<SellLine> sellLine;
     @OneToMany
+    @JoinColumn(name = "fk_id")
     private List<LowHigh> lowHigh;
 
 }

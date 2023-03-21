@@ -2,8 +2,6 @@ package com.PreLab.ApiAlmacen.entities;
 
 import jakarta.persistence.*;
 
-import java.util.Base64;
-
 @Entity
 @Table(name = "suplier")
 public class Suplier {
@@ -18,5 +16,5 @@ public class Suplier {
     @Column
     private String address;
     @Column
-    private Base64 Long;
+    private String Long;
 }
