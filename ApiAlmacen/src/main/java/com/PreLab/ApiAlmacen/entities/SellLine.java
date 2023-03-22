@@ -13,6 +13,9 @@ public class SellLine {
     private Long id;
     @Column
     private Integer quantity;
+
+    @Column
+    private Integer price;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "sale_id")
     private Sale sale;

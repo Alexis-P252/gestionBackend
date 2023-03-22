@@ -17,7 +17,9 @@ public class Product {
     @Column
     private String description;
     @Column
-    private Float price;
+    private Integer buy_price;
+    @Column
+    private Integer sell_price;
     @Column
     private Integer stock;
     @Column
@@ -28,5 +30,8 @@ public class Product {
     private List<SellLine> sellLine;
     @OneToMany(mappedBy = "productLH")
     private List<LowHigh> lowHigh;
+
+    @ManyToOne
+    private Category category;
 
 }

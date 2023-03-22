@@ -118,13 +118,22 @@ import java.util.Map;
         Map<String,Object> response = new HashMap<>();
 
         if(offerService.findById(id) != null ){
-            offerService.deleteById(id);
+            try{
+                offerService.deleteById(id);
+
+            }catch(DataAccessException e){
+                response.put("msg","There was an error when attempting to delete the offer");
+                response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+                return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
             response.put("msg","Offer successfully removed");
             return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
 
         }else{
             response.put("msg","Error trying to delete offer");
-            return new ResponseEntity<Map<String,Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            response.put("error", "There is no offer with id: " + id);
+            return new ResponseEntity<Map<String,Object>>(response, HttpStatus.BAD_REQUEST);
         }
 
     }

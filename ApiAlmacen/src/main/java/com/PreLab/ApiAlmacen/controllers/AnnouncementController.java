@@ -112,17 +112,29 @@ public class AnnouncementController {
 
         Map<String,Object> response = new HashMap<>();
 
-        try {
-            iAnnouncementService.deleteById(id);
+        if(iAnnouncementService.findById(id) != null ){
+            try{
+                iAnnouncementService.deleteById(id);
 
-        }catch(DataAccessException e) {
-            response.put("msg","Error trying to delete announcement");
-            response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String,Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }catch(DataAccessException e){
+                response.put("msg","There was an error when attempting to delete the announcement");
+                response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+                return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            response.put("msg","Announcement successfully removed");
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
+
+        }else{
+            response.put("msg","Error trying to delete the announcement");
+            response.put("error", "There is no announcement with id: " + id);
+            return new ResponseEntity<Map<String,Object>>(response, HttpStatus.BAD_REQUEST);
         }
-        response.put("msg", "Announcement successfully removed");
-        return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
 
     }
+
+
+
+
 
 }

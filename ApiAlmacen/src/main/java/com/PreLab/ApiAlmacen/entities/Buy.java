@@ -21,6 +21,9 @@ public class Buy {
     @Column
     private Long comment;
 
+    @Column
+    private Integer total;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_id")
     private List<BuyLine> buyLine;
@@ -28,5 +31,7 @@ public class Buy {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "suplier_id")
     private Suplier suplier;
+
+
 
 }
