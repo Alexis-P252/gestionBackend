@@ -1,13 +1,12 @@
 package com.PreLab.ApiAlmacen.controllers;
 
 import com.PreLab.ApiAlmacen.entities.Announcement;
-import com.PreLab.ApiAlmacen.entities.Offer;
-import com.PreLab.ApiAlmacen.models.services.IAnnouncementService;
+import com.PreLab.ApiAlmacen.entities.Suplier;
+import com.PreLab.ApiAlmacen.models.services.ISuplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -18,22 +17,23 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/announcement")
-public class AnnouncementController {
+@CrossOrigin(origins = {"http://localhost:4200"})
+@RequestMapping("/api/suplier")
+public class SuplierController {
 
     @Autowired
-    IAnnouncementService iAnnouncementService;
+    private ISuplierService suplierService;
 
-    @GetMapping("/")
-    public List<Announcement> findAll(){return iAnnouncementService.findAll();}
+    @GetMapping("")
+    public List<Suplier> findAll(){return suplierService.findAll();}
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable(value = "id") Long id){
 
-        Announcement announcement = null;
+        Suplier suplier = null;
         Map<String,Object> response = new HashMap<>();
         try {
-            announcement = iAnnouncementService.findById(id);
+            suplier = suplierService.findById(id);
 
         } catch( DataAccessException e) {
             response.put("msg","Error with access to database");
@@ -42,19 +42,19 @@ public class AnnouncementController {
 
         }
 
-        if(announcement == null) {
-            response.put("msg","There is no announcement with id = ".concat(id.toString()));
+        if(suplier == null) {
+            response.put("msg","There is no supplier with id = ".concat(id.toString()));
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
 
         }
 
-        return new ResponseEntity<Announcement>( announcement, HttpStatus.OK);
+        return new ResponseEntity<Suplier>( suplier, HttpStatus.OK);
     }
 
-    @PostMapping("/newAnnouncement")
-    public ResponseEntity<?> create(@RequestBody Announcement announcement, BindingResult result) {
+    @PostMapping("")
+    public ResponseEntity<?> create(@RequestBody Suplier suplier, BindingResult result) {
 
-        Announcement newAnnouncement = null;
+        Suplier newSuplier = null;
         Map<String,Object> response = new HashMap<>();
 
         if(result.hasErrors()){
@@ -70,40 +70,42 @@ public class AnnouncementController {
         }
 
         try {
-            newAnnouncement = iAnnouncementService.save(announcement);
+            newSuplier = suplierService.save(suplier);
         }catch(DataAccessException e) {
-            response.put("msg","Error when trying to insert an annoucement");
+            response.put("msg","Error when trying to insert a new suplier");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        response.put("msg", "Annoucement created succesfully");
-        response.put("announcement", newAnnouncement);
+        response.put("msg", "Suplier created succesfully");
+        response.put("suplier", newSuplier);
         return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@RequestBody Announcement announcement,@PathVariable(value="id")Long id ) {
+    public ResponseEntity<?> update(@RequestBody Suplier suplier,@PathVariable(value="id")Long id ) {
 
-        Announcement currentAnnoucement = iAnnouncementService.findById(id);
+        Suplier currentSuplier = suplierService.findById(id);
 
         Map<String,Object> response = new HashMap<>();
 
-        if(currentAnnoucement == null) {
-            response.put("msg","There is no announcement with id = ".concat(id.toString()));
+        if(currentSuplier == null) {
+            response.put("msg","There is no supplier with id = ".concat(id.toString()));
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
         }
 
-        currentAnnoucement.setTitle(announcement.getTitle());
-        currentAnnoucement.setDescription(announcement.getDescription());
+        currentSuplier.setName(suplier.getName());
+        currentSuplier.setAddress(suplier.getAddress());
+        currentSuplier.setPhoneNumber(suplier.getPhoneNumber());
+        currentSuplier.setImage(suplier.getImage());
 
         try {
-            currentAnnoucement = iAnnouncementService.save(currentAnnoucement);
+            currentSuplier = suplierService.save(currentSuplier);
         }catch(DataAccessException e) {
-            response.put("msg","Error trying to modify announcement");
+            response.put("msg","Error trying to modify the supplier");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        response.put("msg", "Announcement updated successfully");
-        response.put("offer", currentAnnoucement);
+        response.put("msg", "Supplier updated successfully");
+        response.put("supplier", currentSuplier);
         return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
     }
 
@@ -112,28 +114,26 @@ public class AnnouncementController {
 
         Map<String,Object> response = new HashMap<>();
 
-        if(iAnnouncementService.findById(id) != null ){
+        if(suplierService.findById(id) != null ){
             try{
-                iAnnouncementService.deleteById(id);
+                suplierService.deleteById(id);
 
             }catch(DataAccessException e){
-                response.put("msg","There was an error when attempting to delete the announcement");
+                response.put("msg","There was an error when attempting to delete the supplier");
                 response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
                 return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
-            response.put("msg","Announcement successfully removed");
+            response.put("msg","Supplier successfully removed");
             return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
 
         }else{
-            response.put("msg","Error trying to delete the announcement");
-            response.put("error", "There is no announcement with id: " + id);
+            response.put("msg","Error trying to delete the supplier");
+            response.put("error", "There is no supplier with id: " + id);
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.BAD_REQUEST);
         }
 
     }
-
-
 
 
 
