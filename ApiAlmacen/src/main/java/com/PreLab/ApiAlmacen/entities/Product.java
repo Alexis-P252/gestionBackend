@@ -2,6 +2,8 @@ package com.PreLab.ApiAlmacen.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -26,12 +28,7 @@ public class Product {
     private String image;
     @Column
     private Boolean visible;
-    @OneToMany(mappedBy = "product")
-    private List<SellLine> sellLine;
-    @OneToMany(mappedBy = "productLH")
-    private List<LowHigh> lowHigh;
 
     @ManyToOne
     private Category category;
-
 }

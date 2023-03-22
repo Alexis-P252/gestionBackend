@@ -1,9 +1,7 @@
 package com.PreLab.ApiAlmacen.controllers;
 
-import com.PreLab.ApiAlmacen.entities.Category;
-import com.PreLab.ApiAlmacen.entities.Suplier;
-import com.PreLab.ApiAlmacen.models.services.ICategoryService;
-import com.PreLab.ApiAlmacen.models.services.ISuplierService;
+import com.PreLab.ApiAlmacen.entities.Product;
+import com.PreLab.ApiAlmacen.models.services.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -19,22 +17,22 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = {"http://localhost:4200"})
-@RequestMapping("/api/category")
-public class CategoryController {
+@RequestMapping("/api/product")
+public class ProductController {
 
     @Autowired
-    private ICategoryService categoryService;
+    private IProductService productService;
 
     @GetMapping("")
-    public List<Category> findAll(){return categoryService.findAll();}
+    public List<Product> findAll(){return productService.findAll();}
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable(value = "id") Long id){
 
-        Category category = null;
+        Product product = null;
         Map<String,Object> response = new HashMap<>();
         try {
-            category = categoryService.findById(id);
+            product = productService.findById(id);
 
         } catch( DataAccessException e) {
             response.put("msg","Error with access to database");
@@ -43,19 +41,19 @@ public class CategoryController {
 
         }
 
-        if(category == null) {
-            response.put("msg","There is no category with id = ".concat(id.toString()));
+        if(product == null) {
+            response.put("msg","There is no product with id = ".concat(id.toString()));
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
 
         }
 
-        return new ResponseEntity<Category>( category, HttpStatus.OK);
+        return new ResponseEntity<Product>( product, HttpStatus.OK);
     }
 
     @PostMapping("")
-    public ResponseEntity<?> create(@RequestBody Category category, BindingResult result) {
+    public ResponseEntity<?> create(@RequestBody Product product, BindingResult result) {
 
-        Category newCategory = null;
+        Product newProduct = null;
         Map<String,Object> response = new HashMap<>();
 
         if(result.hasErrors()){
@@ -65,46 +63,54 @@ public class CategoryController {
                 errors.add("In the field: " + err.getField() + " - " +err.getDefaultMessage());
             }
             response.put("errors", errors);
-            response.put("msg", "Error in validation category");
+            response.put("msg", "Error in validation product");
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.BAD_REQUEST);
 
         }
 
         try {
-            newCategory = categoryService.save(category);
+            newProduct = productService.save(product);
         }catch(DataAccessException e) {
-            response.put("msg","Error when trying to insert a new category");
+            response.put("msg","Error when trying to insert a new product");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        response.put("msg", "Category created succesfully");
-        response.put("category", newCategory);
+        response.put("msg", "Product created succesfully");
+        response.put("product", newProduct);
         return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@RequestBody Category category,@PathVariable(value="id")Long id ) {
+    public ResponseEntity<?> update(@RequestBody Product product,@PathVariable(value="id")Long id ) {
 
-        Category currentCategory = categoryService.findById(id);
+        Product currentProduct = productService.findById(id);
 
         Map<String,Object> response = new HashMap<>();
 
-        if(currentCategory == null) {
-            response.put("msg","There is no category with id = ".concat(id.toString()));
+        if(currentProduct == null) {
+            response.put("msg","There is no product with id = ".concat(id.toString()));
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
         }
 
 
-        currentCategory.setName(category.getName());
+        currentProduct.setName(product.getName());
+        currentProduct.setCategory(product.getCategory());
+        currentProduct.setImage(product.getImage());
+        currentProduct.setDescription(product.getDescription());
+        currentProduct.setBuy_price(product.getBuy_price());
+        currentProduct.setSell_price(product.getSell_price());
+        currentProduct.setStock(product.getStock());
+        currentProduct.setVisible(product.getVisible());
+
 
         try {
-            currentCategory = categoryService.save(currentCategory);
+            currentProduct = productService.save(currentProduct);
         }catch(DataAccessException e) {
-            response.put("msg","Error trying to modify the category");
+            response.put("msg","Error trying to modify the product");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        response.put("msg", "Category updated successfully");
-        response.put("category", currentCategory);
+        response.put("msg", "Product updated successfully");
+        response.put("product", currentProduct);
         return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
     }
 
@@ -113,22 +119,22 @@ public class CategoryController {
 
         Map<String,Object> response = new HashMap<>();
 
-        if(categoryService.findById(id) != null ){
+        if(productService.findById(id) != null ){
             try{
-                categoryService.deleteById(id);
+                productService.deleteById(id);
 
             }catch(DataAccessException e){
-                response.put("msg","There was an error when attempting to delete the category");
+                response.put("msg","There was an error when attempting to delete the product");
                 response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
                 return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
-            response.put("msg","Category successfully removed");
+            response.put("msg","Product successfully removed");
             return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
 
         }else{
-            response.put("msg","Error trying to delete the category");
-            response.put("error", "There is no category with id: " + id);
+            response.put("msg","Error trying to delete the product");
+            response.put("error", "There is no product with id: " + id);
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.BAD_REQUEST);
         }
 
