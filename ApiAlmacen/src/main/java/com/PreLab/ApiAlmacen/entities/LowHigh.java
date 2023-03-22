@@ -21,7 +21,7 @@ public class LowHigh {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="product_id")
-    private Product productLH;
+    private Product product;
 
 
 }

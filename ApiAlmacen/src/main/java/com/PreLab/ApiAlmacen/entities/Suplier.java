@@ -18,5 +18,5 @@ public class Suplier {
     @Column
     private String address;
     @Column
-    private String Long;
+    private String image;
 }
