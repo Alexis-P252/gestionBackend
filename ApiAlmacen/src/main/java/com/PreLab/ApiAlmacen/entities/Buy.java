@@ -19,13 +19,13 @@ public class Buy {
     private Date date;
 
     @Column
-    private Long comment;
+    private String comment;
 
     @Column
     private Integer total;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_id")
+    @JoinColumn(name = "buy_id")
     private List<BuyLine> buyLine;
 
     @ManyToOne(cascade = CascadeType.ALL)

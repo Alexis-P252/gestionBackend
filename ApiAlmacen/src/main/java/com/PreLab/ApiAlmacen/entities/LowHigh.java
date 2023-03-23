@@ -18,6 +18,8 @@ public class LowHigh {
     private Date date;
     @Column
     private String reason;
+    @Column
+    private Integer quantity;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="product_id")

@@ -1,24 +1,21 @@
 package com.PreLab.ApiAlmacen.controllers;
 
-import com.PreLab.ApiAlmacen.entities.BuyLine;
-import com.PreLab.ApiAlmacen.entities.Product;
+
 import com.PreLab.ApiAlmacen.models.services.IBuyLineService;
-import com.PreLab.ApiAlmacen.models.services.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
+
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
 @RestController
+@CrossOrigin(origins = {"http://localhost:4200"})
+@RequestMapping("/api/buyline")
 public class BuyLineController {
     @Autowired
     private IBuyLineService buyLineService;

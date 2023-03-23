@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/announcement")
+@RequestMapping("/api/announcement")
 public class AnnouncementController {
 
     @Autowired
