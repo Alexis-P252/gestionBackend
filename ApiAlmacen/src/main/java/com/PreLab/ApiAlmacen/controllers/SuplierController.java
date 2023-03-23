@@ -64,7 +64,7 @@ public class SuplierController {
                 errors.add("In the field: " + err.getField() + " - " +err.getDefaultMessage());
             }
             response.put("errors", errors);
-            response.put("msg", "Error in validation announcement");
+            response.put("msg", "Error in validation supplier");
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.BAD_REQUEST);
 
         }

@@ -22,7 +22,7 @@ public class BuyLine implements Serializable {
     @Column
     private Integer price;
 
-    @ManyToOne(cascade = CascadeType.ALL)   
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
     private Product product;
 

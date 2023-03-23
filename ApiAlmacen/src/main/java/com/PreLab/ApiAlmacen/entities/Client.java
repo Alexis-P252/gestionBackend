@@ -21,7 +21,6 @@ public class Client {
     @Column
     private Float debt;
 
-    @OneToMany(mappedBy = "client")
-    private List<Sale> sales;
+
 
 }
