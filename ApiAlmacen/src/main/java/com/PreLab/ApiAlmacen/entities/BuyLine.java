@@ -26,9 +26,4 @@ public class BuyLine {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "buy_id")
-    private Buy buy;
-
-
 }
