@@ -14,7 +14,7 @@ public class Suplier {
     @Column
     private String name;
     @Column
-    private Number phoneNumber;
+    private String phoneNumber;
     @Column
     private String address;
     @Column

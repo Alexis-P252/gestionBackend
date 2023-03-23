@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -24,6 +25,10 @@ public class Sale {
 
     @Column
     private Integer total;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "sale_id")
+    private List<SellLine> sellLines;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id")

@@ -19,7 +19,7 @@ import java.util.Map;
     public class BuyController {
 
         @Autowired
-        IBuyService iBuyService;
+        private IBuyService iBuyService;
 
         @GetMapping("/listBuys")
         public List<Buy> findAll(){return iBuyService.findAll();}
@@ -48,7 +48,7 @@ import java.util.Map;
             return new ResponseEntity<Buy>( buy, HttpStatus.OK);
         }
 
-        @PostMapping("/newAnnouncement")
+        @PostMapping("")
         public ResponseEntity<?> create(@RequestBody Buy buy, BindingResult result) {
 
             Buy newBuy = null;

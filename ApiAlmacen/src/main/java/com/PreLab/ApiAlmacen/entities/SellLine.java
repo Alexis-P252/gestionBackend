@@ -16,9 +16,6 @@ public class SellLine {
 
     @Column
     private Integer price;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "sale_id")
-    private Sale sale;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="product_id")
