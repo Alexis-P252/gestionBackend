@@ -1,7 +1,7 @@
 package com.PreLab.ApiAlmacen.controllers;
 
-import com.PreLab.ApiAlmacen.entities.Announcement;
-import com.PreLab.ApiAlmacen.models.services.IAnnouncementService;
+import com.PreLab.ApiAlmacen.entities.Client;
+import com.PreLab.ApiAlmacen.models.services.IClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -16,22 +16,28 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/announcement")
-public class AnnouncementController {
+@CrossOrigin(origins = {"http://localhost:4200"})
+@RequestMapping("/api/client")
+public class ClientController {
 
     @Autowired
-    IAnnouncementService iAnnouncementService;
+    private IClientService clientService;
 
-    @GetMapping("/")
-    public List<Announcement> findAll(){return iAnnouncementService.findAll();}
+    @GetMapping("")
+    public List<Client> findAll(){return clientService.findAll();}
+
+    @GetMapping("/debt")
+    public List<Client> findwithDebt(){
+        return clientService.findWithDebt();
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable(value = "id") Long id){
 
-        Announcement announcement = null;
+        Client client = null;
         Map<String,Object> response = new HashMap<>();
         try {
-            announcement = iAnnouncementService.findById(id);
+            client = clientService.findById(id);
 
         } catch( DataAccessException e) {
             response.put("msg","Error with access to database");
@@ -40,19 +46,19 @@ public class AnnouncementController {
 
         }
 
-        if(announcement == null) {
-            response.put("msg","There is no announcement with id = ".concat(id.toString()));
+        if(client == null) {
+            response.put("msg","There is no client with id = ".concat(id.toString()));
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
 
         }
 
-        return new ResponseEntity<Announcement>( announcement, HttpStatus.OK);
+        return new ResponseEntity<Client>( client, HttpStatus.OK);
     }
 
-    @PostMapping("/newAnnouncement")
-    public ResponseEntity<?> create(@RequestBody Announcement announcement, BindingResult result) {
+    @PostMapping("")
+    public ResponseEntity<?> create(@RequestBody Client client, BindingResult result) {
 
-        Announcement newAnnouncement = null;
+        Client newClient = null;
         Map<String,Object> response = new HashMap<>();
 
         if(result.hasErrors()){
@@ -62,46 +68,47 @@ public class AnnouncementController {
                 errors.add("In the field: " + err.getField() + " - " +err.getDefaultMessage());
             }
             response.put("errors", errors);
-            response.put("msg", "Error in validation announcement");
+            response.put("msg", "Error in validation client");
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.BAD_REQUEST);
 
         }
 
         try {
-            newAnnouncement = iAnnouncementService.save(announcement);
+            newClient = clientService.save(client);
         }catch(DataAccessException e) {
-            response.put("msg","Error when trying to insert an annoucement");
+            response.put("msg","Error when trying to insert an client");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        response.put("msg", "Annoucement created succesfully");
-        response.put("announcement", newAnnouncement);
+        response.put("msg", "Client created succesfully");
+        response.put("client", newClient);
         return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@RequestBody Announcement announcement,@PathVariable(value="id")Long id ) {
+    public ResponseEntity<?> update(@RequestBody Client client,@PathVariable(value="id")Long id ) {
 
-        Announcement currentAnnoucement = iAnnouncementService.findById(id);
+        Client currentClient = clientService.findById(id);
 
         Map<String,Object> response = new HashMap<>();
 
-        if(currentAnnoucement == null) {
-            response.put("msg","There is no announcement with id = ".concat(id.toString()));
+        if(currentClient == null) {
+            response.put("msg","There is no client with id = ".concat(id.toString()));
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
         }
 
-        currentAnnoucement.setTitle(announcement.getTitle());
-        currentAnnoucement.setDescription(announcement.getDescription());
+        currentClient.setName(client.getName());
+        currentClient.setPhoneNumber(client.getPhoneNumber());
+        currentClient.setDebt(client.getDebt());
 
         try {
-            currentAnnoucement = iAnnouncementService.save(currentAnnoucement);
+            currentClient = clientService.save(currentClient);
         }catch(DataAccessException e) {
-            response.put("msg","Error trying to modify announcement");
+            response.put("msg","Error trying to modify client");
             response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        response.put("msg", "Announcement updated successfully");
-        response.put("announcement", currentAnnoucement);
+        response.put("msg", "Client updated successfully");
+        response.put("client", currentClient);
         return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
     }
 
@@ -110,29 +117,25 @@ public class AnnouncementController {
 
         Map<String,Object> response = new HashMap<>();
 
-        if(iAnnouncementService.findById(id) != null ){
+        if(clientService.findById(id) != null ){
             try{
-                iAnnouncementService.deleteById(id);
+                clientService.deleteById(id);
 
             }catch(DataAccessException e){
-                response.put("msg","There was an error when attempting to delete the announcement");
+                response.put("msg","There was an error when attempting to delete the client");
                 response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
                 return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
-            response.put("msg","Announcement successfully removed");
+            response.put("msg","Client successfully removed");
             return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
 
         }else{
-            response.put("msg","Error trying to delete the announcement");
-            response.put("error", "There is no announcement with id: " + id);
+            response.put("msg","Error trying to delete the client");
+            response.put("error", "There is no client with id: " + id);
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.BAD_REQUEST);
         }
 
     }
-
-
-
-
 
 }

@@ -21,6 +21,15 @@ public class Client {
     @Column
     private Float debt;
 
+    @PrePersist
+    private void prePersist(){
+        // check that debt cannot be < 0.
+        if(this.debt < 0){
+            this.debt = 0F;
+        }
+    }
+
+
 
 
 }
