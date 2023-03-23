@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Entity
 @Data
 @Table(name = "buyLine")
-public class BuyLine {
+public class BuyLine implements Serializable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -22,13 +22,14 @@ public class BuyLine {
     @Column
     private Integer price;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)   
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "buy_id")
-    private Buy buy;
+    private static final long serialVersionUID = 1L;
+
+
+
 
 
 }
