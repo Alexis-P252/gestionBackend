@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
     @RestController
+    @RequestMapping("/api/buy")
     public class BuyController {
 
         @Autowired
@@ -40,7 +41,7 @@ import java.util.Map;
             }
 
             if(buy == null) {
-                response.put("msg","There is no announcement with id = ".concat(id.toString()));
+                response.put("msg","There is no buy with id = ".concat(id.toString()));
                 return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
 
             }
@@ -61,7 +62,7 @@ import java.util.Map;
                     errors.add("In the field: " + err.getField() + " - " +err.getDefaultMessage());
                 }
                 response.put("errors", errors);
-                response.put("msg", "Error in validation announcement");
+                response.put("msg", "Error in validation buy");
                 return new ResponseEntity<Map<String,Object>>(response, HttpStatus.BAD_REQUEST);
 
             }
@@ -69,12 +70,12 @@ import java.util.Map;
             try {
                 newBuy = iBuyService.save(buy);
             }catch(DataAccessException e) {
-                response.put("msg","Error when trying to insert an annoucement");
+                response.put("msg","Error when trying to insert an buy");
                 response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
                 return new ResponseEntity<Map<String,Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            response.put("msg", "Annoucement created succesfully");
-            response.put("announcement", newBuy);
+            response.put("msg", "Buy created succesfully");
+            response.put("buy", newBuy);
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
         }
         @PutMapping("/{id}")
@@ -85,7 +86,7 @@ import java.util.Map;
             Map<String,Object> response = new HashMap<>();
 
             if(currentBuy == null) {
-                response.put("msg","There is no announcement with id = ".concat(id.toString()));
+                response.put("msg","There is no buy with id = ".concat(id.toString()));
                 return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
             }
 
@@ -98,11 +99,11 @@ import java.util.Map;
             try {
                 currentBuy = iBuyService.save(currentBuy);
             }catch(DataAccessException e) {
-                response.put("msg","Error trying to modify announcement");
+                response.put("msg","Error trying to modify buy");
                 response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
                 return new ResponseEntity<Map<String,Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            response.put("msg", "Announcement updated successfully");
+            response.put("msg", "Buy updated successfully");
             response.put("offer", currentBuy);
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
         }
@@ -117,17 +118,17 @@ import java.util.Map;
                     iBuyService.deleteById(id);
 
                 }catch(DataAccessException e){
-                    response.put("msg","There was an error when attempting to delete the announcement");
+                    response.put("msg","There was an error when attempting to delete the buy");
                     response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
                     return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
                 }
 
-                response.put("msg","Announcement successfully removed");
+                response.put("msg","Buy successfully removed");
                 return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
 
             }else{
-                response.put("msg","Error trying to delete the announcement");
-                response.put("error", "There is no announcement with id: " + id);
+                response.put("msg","Error trying to delete the buy");
+                response.put("error", "There is no buy with id: " + id);
                 return new ResponseEntity<Map<String,Object>>(response, HttpStatus.BAD_REQUEST);
             }
 
