@@ -1,6 +1,7 @@
 package com.PreLab.ApiAlmacen.controllers;
 
 import com.PreLab.ApiAlmacen.entities.Sale;
+import com.PreLab.ApiAlmacen.exceptions.NotEnoughStockException;
 import com.PreLab.ApiAlmacen.models.services.ISaleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -70,10 +71,17 @@ public class SaleController {
 
         try {
             newSale = saleService.save(sale);
-        }catch(DataAccessException e) {
+        }catch(DataAccessException | NotEnoughStockException  e) {
             response.put("msg","Error when trying to insert a new sale");
-            response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String,Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            response.put("error", e.getMessage());
+
+            if(e instanceof NotEnoughStockException){
+                return new ResponseEntity<Map<String,Object>>(response, HttpStatus.BAD_REQUEST);
+            }
+            else{
+                return new ResponseEntity<Map<String,Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
         }
         response.put("msg", "Sale created succesfully");
         response.put("sale", newSale);
