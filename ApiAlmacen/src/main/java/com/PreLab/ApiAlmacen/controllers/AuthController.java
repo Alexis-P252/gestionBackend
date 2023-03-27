@@ -24,15 +24,15 @@ public class AuthController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody ObjectNode JSONObject){
+    public ResponseEntity<?> register(@RequestBody Admin admin){
 
         Map<String,Object> response = new HashMap<>();
         String username = null;
         String password = null;
 
         try{
-            username = JSONObject.get("username").asText();
-            password = JSONObject.get("password").asText();
+            username = admin.getUsername();
+            password = admin.getPassword();
         }catch (Exception e){
             response.put("msg", "An error occurred during registration");
             response.put("error", "You must write an username and a password");
@@ -44,10 +44,6 @@ public class AuthController {
             response.put("error", "Username is already taken!");
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
         }
-
-        Admin admin = new Admin();
-        admin.setUsername(username);
-        admin.setPassword(password);
 
         adminService.save(admin);
 
