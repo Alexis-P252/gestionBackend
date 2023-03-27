@@ -1,6 +1,7 @@
 package com.PreLab.ApiAlmacen.models.services;
 
 import com.PreLab.ApiAlmacen.entities.Sale;
+import com.PreLab.ApiAlmacen.entities.SellLine;
 import com.PreLab.ApiAlmacen.models.dao.ISaleDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,18 @@ public class SaleService implements ISaleService{
 
     @Override
     public Sale save(Sale sale) {
+
+        Integer total = 0;
+
+        // Update the stock of each product included in the sale and obtains the total amount.
+        for(SellLine sl: sale.getSellLines()){
+            sl.getProduct().setStock(sl.getProduct().getStock() - sl.getQuantity());
+            sl.setPrice(sl.getQuantity() * sl.getProduct().getSell_price()); // Calculate the sale line total
+            total = total + sl.getPrice(); // Add the sale line total to the buy total
+        }
+
+        sale.setTotal(total);
+
         return saleDao.save(sale);
     }
 
