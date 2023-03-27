@@ -13,7 +13,7 @@ public class LowHigh {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
-    private Boolean lowHigh;
+    private Boolean lowHigh; // true = high, false = low
     @Column
     private Date date;
     @Column
