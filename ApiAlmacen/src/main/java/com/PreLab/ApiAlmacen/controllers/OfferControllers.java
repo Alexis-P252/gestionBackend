@@ -18,19 +18,19 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/offer")
  public class OfferControllers {
 
     @Autowired
     private IOfferService offerService;
 
-    @GetMapping("/offers")
+    @GetMapping("")
     public List<Offer> findAll(){
         return offerService.findAll();
     }
 
 
-    @GetMapping("/offers/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable(value="id") Long id) {
 
         Offer offer = null;
@@ -55,7 +55,7 @@ import java.util.Map;
 
     }
 
-    @PostMapping("/offer")
+    @PostMapping("")
     @VerifyToken
     public ResponseEntity<?> create(@RequestBody Offer cliente, BindingResult result) {
 
@@ -86,7 +86,7 @@ import java.util.Map;
         return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
     }
 
-    @PutMapping("/offers/{id}")
+    @PutMapping("/{id}")
     @VerifyToken
     public ResponseEntity<?> update(@RequestBody Offer offer,@PathVariable(value="id")Long id ) {
 
@@ -115,7 +115,7 @@ import java.util.Map;
         return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/offers/{id}")
+    @DeleteMapping("/{id}")
     @VerifyToken
     public ResponseEntity<?> delete(@PathVariable(value="id") Long id) {
 

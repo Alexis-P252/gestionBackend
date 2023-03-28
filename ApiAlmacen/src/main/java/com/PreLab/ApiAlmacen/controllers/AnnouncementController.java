@@ -23,7 +23,7 @@ public class AnnouncementController {
     @Autowired
     IAnnouncementService iAnnouncementService;
 
-    @GetMapping("/")
+    @GetMapping("   ")
     public List<Announcement> findAll(){return iAnnouncementService.findAll();}
 
     @GetMapping("/{id}")

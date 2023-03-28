@@ -30,6 +30,7 @@ public class VerifyTokenInterceptor implements HandlerInterceptor{
         if (handlerMethod.getMethod().isAnnotationPresent(VerifyToken.class)) {
 
             String jwt = request.getHeader("Authorization");
+            jwt = jwt.substring(7, jwt.length());
             System.out.println("jwt = " + jwt);
             if(! jwtUtil.verifyToken(jwt)){
 
