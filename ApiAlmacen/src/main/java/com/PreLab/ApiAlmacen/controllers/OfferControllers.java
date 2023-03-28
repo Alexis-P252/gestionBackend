@@ -1,5 +1,6 @@
 package com.PreLab.ApiAlmacen.controllers;
 
+import com.PreLab.ApiAlmacen.annotations.VerifyToken;
 import com.PreLab.ApiAlmacen.entities.Offer;
 import com.PreLab.ApiAlmacen.models.services.IOfferService;
 import lombok.Data;
@@ -55,6 +56,7 @@ import java.util.Map;
     }
 
     @PostMapping("/offer")
+    @VerifyToken
     public ResponseEntity<?> create(@RequestBody Offer cliente, BindingResult result) {
 
         Offer newOffer = null;
@@ -85,6 +87,7 @@ import java.util.Map;
     }
 
     @PutMapping("/offers/{id}")
+    @VerifyToken
     public ResponseEntity<?> update(@RequestBody Offer offer,@PathVariable(value="id")Long id ) {
 
         Offer currentOffer = offerService.findById(id);
@@ -113,6 +116,7 @@ import java.util.Map;
     }
 
     @DeleteMapping("/offers/{id}")
+    @VerifyToken
     public ResponseEntity<?> delete(@PathVariable(value="id") Long id) {
 
         Map<String,Object> response = new HashMap<>();

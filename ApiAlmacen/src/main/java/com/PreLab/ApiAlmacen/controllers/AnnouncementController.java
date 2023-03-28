@@ -1,5 +1,6 @@
 package com.PreLab.ApiAlmacen.controllers;
 
+import com.PreLab.ApiAlmacen.annotations.VerifyToken;
 import com.PreLab.ApiAlmacen.entities.Announcement;
 import com.PreLab.ApiAlmacen.models.services.IAnnouncementService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,8 @@ public class AnnouncementController {
         return new ResponseEntity<Announcement>( announcement, HttpStatus.OK);
     }
 
-    @PostMapping("/newAnnouncement")
+    @PostMapping("")
+    @VerifyToken
     public ResponseEntity<?> create(@RequestBody Announcement announcement, BindingResult result) {
 
         Announcement newAnnouncement = null;
@@ -79,6 +81,7 @@ public class AnnouncementController {
         return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
     }
     @PutMapping("/{id}")
+    @VerifyToken
     public ResponseEntity<?> update(@RequestBody Announcement announcement,@PathVariable(value="id")Long id ) {
 
         Announcement currentAnnoucement = iAnnouncementService.findById(id);
@@ -106,6 +109,7 @@ public class AnnouncementController {
     }
 
     @DeleteMapping("/{id}")
+    @VerifyToken
     public ResponseEntity<?> delete(@PathVariable(value="id") Long id) {
 
         Map<String,Object> response = new HashMap<>();

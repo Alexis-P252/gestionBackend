@@ -1,5 +1,6 @@
 package com.PreLab.ApiAlmacen.controllers;
 
+import com.PreLab.ApiAlmacen.annotations.VerifyToken;
 import com.PreLab.ApiAlmacen.entities.Client;
 import com.PreLab.ApiAlmacen.models.services.IClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +25,17 @@ public class ClientController {
     private IClientService clientService;
 
     @GetMapping("")
+    @VerifyToken
     public List<Client> findAll(){return clientService.findAll();}
 
     @GetMapping("/debt")
+    @VerifyToken
     public List<Client> findwithDebt(){
         return clientService.findWithDebt();
     }
 
     @GetMapping("/{id}")
+    @VerifyToken
     public ResponseEntity<?> findById(@PathVariable(value = "id") Long id){
 
         Client client = null;
@@ -56,6 +60,7 @@ public class ClientController {
     }
 
     @PostMapping("")
+    @VerifyToken
     public ResponseEntity<?> create(@RequestBody Client client, BindingResult result) {
 
         Client newClient = null;
@@ -85,6 +90,7 @@ public class ClientController {
         return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
     }
     @PutMapping("/{id}")
+    @VerifyToken
     public ResponseEntity<?> update(@RequestBody Client client,@PathVariable(value="id")Long id ) {
 
         Client currentClient = clientService.findById(id);
@@ -113,6 +119,7 @@ public class ClientController {
     }
 
     @DeleteMapping("/{id}")
+    @VerifyToken
     public ResponseEntity<?> delete(@PathVariable(value="id") Long id) {
 
         Map<String,Object> response = new HashMap<>();

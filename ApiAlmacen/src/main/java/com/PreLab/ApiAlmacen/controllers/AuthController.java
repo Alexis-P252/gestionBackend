@@ -1,5 +1,6 @@
 package com.PreLab.ApiAlmacen.controllers;
 
+import com.PreLab.ApiAlmacen.annotations.VerifyToken;
 import com.PreLab.ApiAlmacen.entities.Admin;
 import com.PreLab.ApiAlmacen.models.services.AdminService;
 import com.PreLab.ApiAlmacen.utils.JWTUtil;
@@ -24,6 +25,7 @@ public class AuthController {
 
 
     @PostMapping("/register")
+    @VerifyToken
     public ResponseEntity<?> register(@RequestBody Admin admin){
 
         Map<String,Object> response = new HashMap<>();
