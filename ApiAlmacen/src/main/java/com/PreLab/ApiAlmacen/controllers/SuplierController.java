@@ -19,7 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200"})
+@CrossOrigin(allowedHeaders = {"Authorization"})
+
 @RequestMapping("/api/suplier")
 public class SuplierController {
 
@@ -57,7 +58,7 @@ public class SuplierController {
 
     @PostMapping("")
     @VerifyToken
-    public ResponseEntity<?> create(@RequestBody Suplier suplier, @RequestHeader(value = "Authorization", required = false) String token, BindingResult result) {
+    public ResponseEntity<?> create(@RequestBody Suplier suplier,  BindingResult result) {
 
         Suplier newSuplier = null;
         Map<String,Object> response = new HashMap<>();
@@ -87,7 +88,7 @@ public class SuplierController {
     }
     @PutMapping("/{id}")
     @VerifyToken
-    public ResponseEntity<?> update(@RequestBody Suplier suplier,@PathVariable(value="id")Long id, @RequestHeader(value = "Authorization", required = false) String token ) {
+    public ResponseEntity<?> update(@RequestBody Suplier suplier,@PathVariable(value="id")Long id  ) {
 
         Suplier currentSuplier = suplierService.findById(id);
 
@@ -117,7 +118,7 @@ public class SuplierController {
 
     @DeleteMapping("/{id}")
     @VerifyToken
-    public ResponseEntity<?> delete(@PathVariable(value="id") Long id, @RequestHeader(value = "Authorization", required = false) String token) {
+    public ResponseEntity<?> delete(@PathVariable(value="id") Long id) {
 
         Map<String,Object> response = new HashMap<>();
 
