@@ -1,5 +1,6 @@
 package com.PreLab.ApiAlmacen.controllers;
 
+import com.PreLab.ApiAlmacen.annotations.VerifyToken;
 import com.PreLab.ApiAlmacen.entities.Buy;
 import com.PreLab.ApiAlmacen.models.services.IBuyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,12 @@ import java.util.Map;
         @Autowired
         private IBuyService iBuyService;
 
-        @GetMapping("/listBuys")
+        @GetMapping("")
+        @VerifyToken
         public List<Buy> findAll(){return iBuyService.findAll();}
 
         @GetMapping("/{id}")
+        @VerifyToken
         public ResponseEntity<?> findById(@PathVariable(value = "id") Long id){
 
             Buy buy = null;
@@ -50,6 +53,7 @@ import java.util.Map;
         }
 
         @PostMapping("")
+        @VerifyToken
         public ResponseEntity<?> create(@RequestBody Buy buy, BindingResult result) {
 
             Buy newBuy = null;
@@ -79,6 +83,7 @@ import java.util.Map;
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
         }
         @PutMapping("/{id}")
+        @VerifyToken
         public ResponseEntity<?> update(@RequestBody Buy buy,@PathVariable(value="id")Long id ) {
 
             Buy currentBuy = iBuyService.findById(id);
@@ -109,6 +114,7 @@ import java.util.Map;
         }
 
         @DeleteMapping("/{id}")
+        @VerifyToken
         public ResponseEntity<?> delete(@PathVariable(value="id") Long id) {
 
             Map<String,Object> response = new HashMap<>();

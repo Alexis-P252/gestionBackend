@@ -1,6 +1,7 @@
 package com.PreLab.ApiAlmacen.controllers;
 
 
+import com.PreLab.ApiAlmacen.annotations.VerifyToken;
 import com.PreLab.ApiAlmacen.entities.LowHigh;
 import com.PreLab.ApiAlmacen.models.services.ILowHighService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +28,11 @@ public class LowHighController {
 
 
     @GetMapping("")
+    @VerifyToken
     public List<LowHigh> findAll(){return lowHighService.findAll();}
 
     @GetMapping("/{id}")
+    @VerifyToken
     public ResponseEntity<?> findById(@PathVariable(value = "id") Long id){
 
         LowHigh lowHigh = null;
@@ -56,6 +59,7 @@ public class LowHighController {
 
 
     @PostMapping("")
+    @VerifyToken
     public ResponseEntity<?> create(@RequestBody LowHigh lowHigh, BindingResult result) {
 
         LowHigh newLowHigh = null;
@@ -114,6 +118,7 @@ public class LowHighController {
 //    }
 
     @DeleteMapping("/{id}")
+    @VerifyToken
     public ResponseEntity<?> delete(@PathVariable(value="id") Long id) {
 
         Map<String,Object> response = new HashMap<>();

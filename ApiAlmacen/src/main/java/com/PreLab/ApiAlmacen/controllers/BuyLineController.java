@@ -1,6 +1,7 @@
 package com.PreLab.ApiAlmacen.controllers;
 
 
+import com.PreLab.ApiAlmacen.annotations.VerifyToken;
 import com.PreLab.ApiAlmacen.models.services.IBuyLineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -21,6 +22,7 @@ public class BuyLineController {
     private IBuyLineService buyLineService;
 
     @DeleteMapping("/{id}")
+    @VerifyToken
     public ResponseEntity<?> delete(@PathVariable(value="id") Long id) {
 
         Map<String,Object> response = new HashMap<>();

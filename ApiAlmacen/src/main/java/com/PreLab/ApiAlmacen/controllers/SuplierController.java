@@ -1,8 +1,10 @@
 package com.PreLab.ApiAlmacen.controllers;
 
+import com.PreLab.ApiAlmacen.annotations.VerifyToken;
 import com.PreLab.ApiAlmacen.entities.Announcement;
 import com.PreLab.ApiAlmacen.entities.Suplier;
 import com.PreLab.ApiAlmacen.models.services.ISuplierService;
+import io.swagger.v3.oas.annotations.headers.Header;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -17,7 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200"})
+@CrossOrigin(allowedHeaders = {"Authorization"})
+
 @RequestMapping("/api/suplier")
 public class SuplierController {
 
@@ -25,10 +28,12 @@ public class SuplierController {
     private ISuplierService suplierService;
 
     @GetMapping("")
+    @VerifyToken
     public List<Suplier> findAll(){return suplierService.findAll();}
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable(value = "id") Long id){
+    @VerifyToken
+    public ResponseEntity<?> findById(@PathVariable(value = "id") Long id, @RequestHeader(value = "Authorization", required = false) String token){
 
         Suplier suplier = null;
         Map<String,Object> response = new HashMap<>();
@@ -52,7 +57,8 @@ public class SuplierController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> create(@RequestBody Suplier suplier, BindingResult result) {
+    @VerifyToken
+    public ResponseEntity<?> create(@RequestBody Suplier suplier,  BindingResult result) {
 
         Suplier newSuplier = null;
         Map<String,Object> response = new HashMap<>();
@@ -81,7 +87,8 @@ public class SuplierController {
         return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@RequestBody Suplier suplier,@PathVariable(value="id")Long id ) {
+    @VerifyToken
+    public ResponseEntity<?> update(@RequestBody Suplier suplier,@PathVariable(value="id")Long id  ) {
 
         Suplier currentSuplier = suplierService.findById(id);
 
@@ -110,6 +117,7 @@ public class SuplierController {
     }
 
     @DeleteMapping("/{id}")
+    @VerifyToken
     public ResponseEntity<?> delete(@PathVariable(value="id") Long id) {
 
         Map<String,Object> response = new HashMap<>();
