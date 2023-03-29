@@ -1,6 +1,7 @@
 package com.PreLab.ApiAlmacen.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Entity
@@ -11,6 +12,7 @@ public class Offer {
     private Long id;
 
     @Column
+    @NotEmpty
     private String title;
 
     @Column

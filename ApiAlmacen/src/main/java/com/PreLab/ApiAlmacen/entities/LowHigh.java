@@ -1,6 +1,8 @@
 package com.PreLab.ApiAlmacen.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 import java.util.Date;
@@ -13,12 +15,14 @@ public class LowHigh {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
+    @NotEmpty
     private Boolean lowHigh; // true = high, false = low
     @Column
     private Date date;
     @Column
     private String reason;
     @Column
+    @Positive
     private Integer quantity;
 
     @ManyToOne(cascade = CascadeType.ALL)

@@ -3,6 +3,7 @@ package com.PreLab.ApiAlmacen.controllers;
 import com.PreLab.ApiAlmacen.annotations.VerifyToken;
 import com.PreLab.ApiAlmacen.entities.Announcement;
 import com.PreLab.ApiAlmacen.models.services.IAnnouncementService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -52,7 +53,7 @@ public class AnnouncementController {
 
     @PostMapping("")
     @VerifyToken
-    public ResponseEntity<?> create(@RequestBody Announcement announcement, BindingResult result) {
+    public ResponseEntity<?> create(@Valid @RequestBody Announcement announcement, BindingResult result) {
 
         Announcement newAnnouncement = null;
         Map<String,Object> response = new HashMap<>();
@@ -82,7 +83,7 @@ public class AnnouncementController {
     }
     @PutMapping("/{id}")
     @VerifyToken
-    public ResponseEntity<?> update(@RequestBody Announcement announcement,@PathVariable(value="id")Long id ) {
+    public ResponseEntity<?> update(@Valid @RequestBody Announcement announcement, BindingResult result, @PathVariable(value="id")Long id ) {
 
         Announcement currentAnnoucement = iAnnouncementService.findById(id);
 
@@ -91,6 +92,18 @@ public class AnnouncementController {
         if(currentAnnoucement == null) {
             response.put("msg","There is no announcement with id = ".concat(id.toString()));
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
+        }
+
+        if(result.hasErrors()){
+            List<String> errors = new ArrayList<>();
+
+            for(FieldError err: result.getFieldErrors()){
+                errors.add("In the field: " + err.getField() + " - " +err.getDefaultMessage());
+            }
+            response.put("errors", errors);
+            response.put("msg", "Error in validation announcement");
+            return new ResponseEntity<Map<String,Object>>(response, HttpStatus.BAD_REQUEST);
+
         }
 
         currentAnnoucement.setTitle(announcement.getTitle());

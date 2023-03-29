@@ -3,6 +3,7 @@ package com.PreLab.ApiAlmacen.entities;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 import java.util.Date;
@@ -15,8 +16,11 @@ public class Admin {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     @Column
+    @NotEmpty
     private String username;
-    @Column String password;
+    @Column
+    @NotEmpty
+    String password;
 
     @PrePersist
     public void prePersist() {

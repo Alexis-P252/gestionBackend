@@ -4,6 +4,7 @@ import com.PreLab.ApiAlmacen.annotations.VerifyToken;
 import com.PreLab.ApiAlmacen.entities.Sale;
 import com.PreLab.ApiAlmacen.exceptions.NotEnoughStockException;
 import com.PreLab.ApiAlmacen.models.services.ISaleService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -56,7 +57,7 @@ public class SaleController {
 
     @PostMapping("")
     @VerifyToken
-    public ResponseEntity<?> create(@RequestBody Sale sale, BindingResult result) {
+    public ResponseEntity<?> create(@Valid @RequestBody Sale sale, BindingResult result) {
 
         Sale newSale = null;
         Map<String,Object> response = new HashMap<>();

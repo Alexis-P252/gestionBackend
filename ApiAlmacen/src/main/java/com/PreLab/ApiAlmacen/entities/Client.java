@@ -1,6 +1,8 @@
 package com.PreLab.ApiAlmacen.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 
 import java.util.List;
@@ -13,12 +15,14 @@ public class Client {
     private Long id;
 
     @Column
+    @NotEmpty
     private String name;
 
     @Column
     private String phoneNumber;
 
     @Column
+    @PositiveOrZero
     private Float debt;
 
     @PrePersist

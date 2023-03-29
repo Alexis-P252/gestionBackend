@@ -5,6 +5,7 @@ import com.PreLab.ApiAlmacen.entities.Category;
 import com.PreLab.ApiAlmacen.entities.Suplier;
 import com.PreLab.ApiAlmacen.models.services.ICategoryService;
 import com.PreLab.ApiAlmacen.models.services.ISuplierService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -55,7 +56,7 @@ public class CategoryController {
 
     @PostMapping("")
     @VerifyToken
-    public ResponseEntity<?> create(@RequestBody Category category, BindingResult result) {
+    public ResponseEntity<?> create(@Valid @RequestBody Category category, BindingResult result) {
 
         Category newCategory = null;
         Map<String,Object> response = new HashMap<>();
@@ -85,7 +86,7 @@ public class CategoryController {
     }
     @PutMapping("/{id}")
     @VerifyToken
-    public ResponseEntity<?> update(@RequestBody Category category,@PathVariable(value="id")Long id ) {
+    public ResponseEntity<?> update(@Valid @RequestBody Category category, BindingResult result, @PathVariable(value="id")Long id  ) {
 
         Category currentCategory = categoryService.findById(id);
 
@@ -94,6 +95,18 @@ public class CategoryController {
         if(currentCategory == null) {
             response.put("msg","There is no category with id = ".concat(id.toString()));
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
+        }
+
+        if(result.hasErrors()){
+            List<String> errors = new ArrayList<>();
+
+            for(FieldError err: result.getFieldErrors()){
+                errors.add("In the field: " + err.getField() + " - " +err.getDefaultMessage());
+            }
+            response.put("errors", errors);
+            response.put("msg", "Error in validation category");
+            return new ResponseEntity<Map<String,Object>>(response, HttpStatus.BAD_REQUEST);
+
         }
 
 

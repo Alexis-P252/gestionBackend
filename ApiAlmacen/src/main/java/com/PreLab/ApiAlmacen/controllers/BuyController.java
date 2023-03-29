@@ -3,6 +3,7 @@ package com.PreLab.ApiAlmacen.controllers;
 import com.PreLab.ApiAlmacen.annotations.VerifyToken;
 import com.PreLab.ApiAlmacen.entities.Buy;
 import com.PreLab.ApiAlmacen.models.services.IBuyService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -54,7 +55,7 @@ import java.util.Map;
 
         @PostMapping("")
         @VerifyToken
-        public ResponseEntity<?> create(@RequestBody Buy buy, BindingResult result) {
+        public ResponseEntity<?> create(@Valid @RequestBody Buy buy, BindingResult result) {
 
             Buy newBuy = null;
             Map<String,Object> response = new HashMap<>();
@@ -84,7 +85,7 @@ import java.util.Map;
         }
         @PutMapping("/{id}")
         @VerifyToken
-        public ResponseEntity<?> update(@RequestBody Buy buy,@PathVariable(value="id")Long id ) {
+        public ResponseEntity<?> update(@Valid @RequestBody Buy buy, BindingResult result, @PathVariable(value="id")Long id) {
 
             Buy currentBuy = iBuyService.findById(id);
 
@@ -93,6 +94,18 @@ import java.util.Map;
             if(currentBuy == null) {
                 response.put("msg","There is no buy with id = ".concat(id.toString()));
                 return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
+            }
+
+            if(result.hasErrors()){
+                List<String> errors = new ArrayList<>();
+
+                for(FieldError err: result.getFieldErrors()){
+                    errors.add("In the field: " + err.getField() + " - " +err.getDefaultMessage());
+                }
+                response.put("errors", errors);
+                response.put("msg", "Error in validation buy");
+                return new ResponseEntity<Map<String,Object>>(response, HttpStatus.BAD_REQUEST);
+
             }
 
             currentBuy.setComment(buy.getComment());

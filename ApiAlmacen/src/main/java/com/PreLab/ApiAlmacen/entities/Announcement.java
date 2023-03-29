@@ -1,6 +1,7 @@
 package com.PreLab.ApiAlmacen.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Entity
@@ -12,6 +13,7 @@ public class Announcement {
     private Long id;
 
     @Column
+    @NotEmpty
     private String title;
 
     @Column

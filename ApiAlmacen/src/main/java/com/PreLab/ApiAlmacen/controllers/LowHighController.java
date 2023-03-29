@@ -4,6 +4,7 @@ package com.PreLab.ApiAlmacen.controllers;
 import com.PreLab.ApiAlmacen.annotations.VerifyToken;
 import com.PreLab.ApiAlmacen.entities.LowHigh;
 import com.PreLab.ApiAlmacen.models.services.ILowHighService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -60,7 +61,7 @@ public class LowHighController {
 
     @PostMapping("")
     @VerifyToken
-    public ResponseEntity<?> create(@RequestBody LowHigh lowHigh, BindingResult result) {
+    public ResponseEntity<?> create(@Valid @RequestBody LowHigh lowHigh, BindingResult result) {
 
         LowHigh newLowHigh = null;
         Map<String,Object> response = new HashMap<>();

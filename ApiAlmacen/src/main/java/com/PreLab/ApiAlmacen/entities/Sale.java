@@ -1,6 +1,7 @@
 package com.PreLab.ApiAlmacen.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 import java.util.Date;
@@ -24,6 +25,7 @@ public class Sale {
     private String paymentMethod;
 
     @Column
+    @Positive
     private Integer total;
 
     @OneToMany(cascade = CascadeType.ALL)

@@ -3,6 +3,7 @@ package com.PreLab.ApiAlmacen.controllers;
 import com.PreLab.ApiAlmacen.annotations.VerifyToken;
 import com.PreLab.ApiAlmacen.entities.Client;
 import com.PreLab.ApiAlmacen.models.services.IClientService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -61,7 +62,7 @@ public class ClientController {
 
     @PostMapping("")
     @VerifyToken
-    public ResponseEntity<?> create(@RequestBody Client client, BindingResult result) {
+    public ResponseEntity<?> create(@Valid @RequestBody Client client, BindingResult result) {
 
         Client newClient = null;
         Map<String,Object> response = new HashMap<>();
@@ -91,7 +92,7 @@ public class ClientController {
     }
     @PutMapping("/{id}")
     @VerifyToken
-    public ResponseEntity<?> update(@RequestBody Client client,@PathVariable(value="id")Long id ) {
+    public ResponseEntity<?> update(@Valid @RequestBody Client client, BindingResult result, @PathVariable(value="id")Long id) {
 
         Client currentClient = clientService.findById(id);
 
@@ -100,6 +101,18 @@ public class ClientController {
         if(currentClient == null) {
             response.put("msg","There is no client with id = ".concat(id.toString()));
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
+        }
+
+        if(result.hasErrors()){
+            List<String> errors = new ArrayList<>();
+
+            for(FieldError err: result.getFieldErrors()){
+                errors.add("In the field: " + err.getField() + " - " +err.getDefaultMessage());
+            }
+            response.put("errors", errors);
+            response.put("msg", "Error in validation client");
+            return new ResponseEntity<Map<String,Object>>(response, HttpStatus.BAD_REQUEST);
+
         }
 
         currentClient.setName(client.getName());

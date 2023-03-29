@@ -3,6 +3,7 @@ package com.PreLab.ApiAlmacen.controllers;
 import com.PreLab.ApiAlmacen.annotations.VerifyToken;
 import com.PreLab.ApiAlmacen.entities.Product;
 import com.PreLab.ApiAlmacen.models.services.IProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -53,7 +54,7 @@ public class ProductController {
 
     @PostMapping("")
     @VerifyToken
-    public ResponseEntity<?> create(@RequestBody Product product, BindingResult result) {
+    public ResponseEntity<?> create(@Valid @RequestBody Product product, BindingResult result) {
 
         Product newProduct = null;
         Map<String,Object> response = new HashMap<>();
@@ -83,7 +84,7 @@ public class ProductController {
     }
     @PutMapping("/{id}")
     @VerifyToken
-    public ResponseEntity<?> update(@RequestBody Product product,@PathVariable(value="id")Long id ) {
+    public ResponseEntity<?> update(@Valid @RequestBody Product product, BindingResult result, @PathVariable(value="id")Long id ) {
 
         Product currentProduct = productService.findById(id);
 
@@ -92,6 +93,18 @@ public class ProductController {
         if(currentProduct == null) {
             response.put("msg","There is no product with id = ".concat(id.toString()));
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
+        }
+
+        if(result.hasErrors()){
+            List<String> errors = new ArrayList<>();
+
+            for(FieldError err: result.getFieldErrors()){
+                errors.add("In the field: " + err.getField() + " - " +err.getDefaultMessage());
+            }
+            response.put("errors", errors);
+            response.put("msg", "Error in validation product");
+            return new ResponseEntity<Map<String,Object>>(response, HttpStatus.BAD_REQUEST);
+
         }
 
 

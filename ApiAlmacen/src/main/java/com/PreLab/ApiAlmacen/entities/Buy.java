@@ -1,6 +1,9 @@
 package com.PreLab.ApiAlmacen.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -16,12 +19,14 @@ public class Buy {
     private Long id;
 
     @Column
+    @NotEmpty
     private Date date;
 
     @Column
     private String comment;
 
     @Column
+    @Positive
     private Integer total;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -30,6 +35,7 @@ public class Buy {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "suplier_id")
+    @NotEmpty
     private Suplier suplier;
 
 

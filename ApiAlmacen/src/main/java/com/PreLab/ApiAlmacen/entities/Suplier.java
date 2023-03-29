@@ -1,6 +1,7 @@
 package com.PreLab.ApiAlmacen.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Entity
@@ -12,8 +13,10 @@ public class Suplier {
     private Long id;
 
     @Column
+    @NotEmpty
     private String name;
     @Column
+    @NotEmpty
     private String phoneNumber;
     @Column
     private String address;

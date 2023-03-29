@@ -5,6 +5,7 @@ import com.PreLab.ApiAlmacen.entities.Announcement;
 import com.PreLab.ApiAlmacen.entities.Suplier;
 import com.PreLab.ApiAlmacen.models.services.ISuplierService;
 import io.swagger.v3.oas.annotations.headers.Header;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -58,7 +59,7 @@ public class SuplierController {
 
     @PostMapping("")
     @VerifyToken
-    public ResponseEntity<?> create(@RequestBody Suplier suplier,  BindingResult result) {
+    public ResponseEntity<?> create(@Valid @RequestBody Suplier suplier, BindingResult result) {
 
         Suplier newSuplier = null;
         Map<String,Object> response = new HashMap<>();
@@ -88,7 +89,7 @@ public class SuplierController {
     }
     @PutMapping("/{id}")
     @VerifyToken
-    public ResponseEntity<?> update(@RequestBody Suplier suplier,@PathVariable(value="id")Long id  ) {
+    public ResponseEntity<?> update(@Valid @RequestBody Suplier suplier, BindingResult result, @PathVariable(value="id")Long id) {
 
         Suplier currentSuplier = suplierService.findById(id);
 
@@ -97,6 +98,18 @@ public class SuplierController {
         if(currentSuplier == null) {
             response.put("msg","There is no supplier with id = ".concat(id.toString()));
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
+        }
+
+        if(result.hasErrors()){
+            List<String> errors = new ArrayList<>();
+
+            for(FieldError err: result.getFieldErrors()){
+                errors.add("In the field: " + err.getField() + " - " +err.getDefaultMessage());
+            }
+            response.put("errors", errors);
+            response.put("msg", "Error in validation supplier");
+            return new ResponseEntity<Map<String,Object>>(response, HttpStatus.BAD_REQUEST);
+
         }
 
         currentSuplier.setName(suplier.getName());

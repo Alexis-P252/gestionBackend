@@ -1,6 +1,8 @@
 package com.PreLab.ApiAlmacen.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
 import lombok.Cleanup;
 import lombok.Data;
 import org.hibernate.engine.internal.Cascade;
@@ -17,9 +19,11 @@ public class BuyLine implements Serializable {
     private Long id;
 
     @Column
+    @Positive
     private Integer quantity;
 
     @Column
+    @Positive
     private Integer price;
 
     @ManyToOne(cascade = CascadeType.ALL)

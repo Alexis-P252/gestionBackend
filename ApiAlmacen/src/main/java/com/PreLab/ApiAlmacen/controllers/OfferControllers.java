@@ -3,6 +3,7 @@ package com.PreLab.ApiAlmacen.controllers;
 import com.PreLab.ApiAlmacen.annotations.VerifyToken;
 import com.PreLab.ApiAlmacen.entities.Offer;
 import com.PreLab.ApiAlmacen.models.services.IOfferService;
+import jakarta.validation.Valid;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -57,7 +58,7 @@ import java.util.Map;
 
     @PostMapping("")
     @VerifyToken
-    public ResponseEntity<?> create(@RequestBody Offer cliente, BindingResult result) {
+    public ResponseEntity<?> create(@Valid @RequestBody Offer cliente, BindingResult result) {
 
         Offer newOffer = null;
         Map<String,Object> response = new HashMap<>();
@@ -88,7 +89,7 @@ import java.util.Map;
 
     @PutMapping("/{id}")
     @VerifyToken
-    public ResponseEntity<?> update(@RequestBody Offer offer,@PathVariable(value="id")Long id ) {
+    public ResponseEntity<?> update(@Valid @RequestBody Offer offer, BindingResult result, @PathVariable(value="id")Long id) {
 
         Offer currentOffer = offerService.findById(id);
 
@@ -97,6 +98,18 @@ import java.util.Map;
         if(currentOffer == null) {
             response.put("msg","There is no user with id = ".concat(id.toString()));
             return new ResponseEntity<Map<String,Object>>(response, HttpStatus.NOT_FOUND);
+        }
+
+        if(result.hasErrors()){
+            List<String> errors = new ArrayList<>();
+
+            for(FieldError err: result.getFieldErrors()){
+                errors.add("In the field: " + err.getField() + " - " +err.getDefaultMessage());
+            }
+            response.put("errors", errors);
+            response.put("msg", "Error in validation offer");
+            return new ResponseEntity<Map<String,Object>>(response, HttpStatus.BAD_REQUEST);
+
         }
 
         currentOffer.setTitle(offer.getTitle());
