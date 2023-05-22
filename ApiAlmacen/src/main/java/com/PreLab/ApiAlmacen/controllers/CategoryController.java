@@ -54,7 +54,6 @@ public class CategoryController {
     }
 
     @PostMapping("")
-    @VerifyToken
     public ResponseEntity<?> create(@RequestBody Category category, BindingResult result) {
 
         Category newCategory = null;
@@ -84,7 +83,6 @@ public class CategoryController {
         return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
     }
     @PutMapping("/{id}")
-    @VerifyToken
     public ResponseEntity<?> update(@RequestBody Category category,@PathVariable(value="id")Long id ) {
 
         Category currentCategory = categoryService.findById(id);
@@ -112,7 +110,6 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    @VerifyToken
     public ResponseEntity<?> delete(@PathVariable(value="id") Long id) {
 
         Map<String,Object> response = new HashMap<>();

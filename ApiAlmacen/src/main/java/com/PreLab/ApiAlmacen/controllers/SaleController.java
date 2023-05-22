@@ -26,11 +26,11 @@ public class SaleController {
     private ISaleService saleService;
 
     @GetMapping("")
-    @VerifyToken
+    //
     public List<Sale> findAll(){return saleService.findAll();}
 
     @GetMapping("/{id}")
-    @VerifyToken
+    //
     public ResponseEntity<?> findById(@PathVariable(value = "id") Long id){
 
         Sale sale = null;
@@ -55,7 +55,7 @@ public class SaleController {
     }
 
     @PostMapping("")
-    @VerifyToken
+    //
     public ResponseEntity<?> create(@RequestBody Sale sale, BindingResult result) {
 
         Sale newSale = null;
@@ -94,7 +94,7 @@ public class SaleController {
 
 
     @DeleteMapping("/{id}")
-    @VerifyToken
+    //
     public ResponseEntity<?> delete(@PathVariable(value="id") Long id) {
 
         Map<String,Object> response = new HashMap<>();

@@ -22,7 +22,6 @@ public class BuyLineController {
     private IBuyLineService buyLineService;
 
     @DeleteMapping("/{id}")
-    @VerifyToken
     public ResponseEntity<?> delete(@PathVariable(value="id") Long id) {
 
         Map<String,Object> response = new HashMap<>();

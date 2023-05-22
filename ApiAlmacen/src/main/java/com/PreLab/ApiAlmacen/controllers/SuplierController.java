@@ -28,11 +28,11 @@ public class SuplierController {
     private ISuplierService suplierService;
 
     @GetMapping("")
-    @VerifyToken
+    //
     public List<Suplier> findAll(){return suplierService.findAll();}
 
     @GetMapping("/{id}")
-    @VerifyToken
+    //
     public ResponseEntity<?> findById(@PathVariable(value = "id") Long id, @RequestHeader(value = "Authorization", required = false) String token){
 
         Suplier suplier = null;
@@ -57,7 +57,7 @@ public class SuplierController {
     }
 
     @PostMapping("")
-    @VerifyToken
+    //
     public ResponseEntity<?> create(@RequestBody Suplier suplier,  BindingResult result) {
 
         Suplier newSuplier = null;
@@ -87,7 +87,7 @@ public class SuplierController {
         return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
     }
     @PutMapping("/{id}")
-    @VerifyToken
+    //
     public ResponseEntity<?> update(@RequestBody Suplier suplier,@PathVariable(value="id")Long id  ) {
 
         Suplier currentSuplier = suplierService.findById(id);
@@ -117,7 +117,7 @@ public class SuplierController {
     }
 
     @DeleteMapping("/{id}")
-    @VerifyToken
+    //
     public ResponseEntity<?> delete(@PathVariable(value="id") Long id) {
 
         Map<String,Object> response = new HashMap<>();

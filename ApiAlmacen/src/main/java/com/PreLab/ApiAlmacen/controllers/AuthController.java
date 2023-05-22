@@ -25,7 +25,7 @@ public class AuthController {
 
 
     @PostMapping("/register")
-    @VerifyToken
+
     public ResponseEntity<?> register(@RequestBody Admin admin){
 
         Map<String,Object> response = new HashMap<>();

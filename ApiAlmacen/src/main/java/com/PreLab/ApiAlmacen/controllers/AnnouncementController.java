@@ -51,7 +51,6 @@ public class AnnouncementController {
     }
 
     @PostMapping("")
-    @VerifyToken
     public ResponseEntity<?> create(@RequestBody Announcement announcement, BindingResult result) {
 
         Announcement newAnnouncement = null;
@@ -81,7 +80,6 @@ public class AnnouncementController {
         return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
     }
     @PutMapping("/{id}")
-    @VerifyToken
     public ResponseEntity<?> update(@RequestBody Announcement announcement,@PathVariable(value="id")Long id ) {
 
         Announcement currentAnnoucement = iAnnouncementService.findById(id);
@@ -109,7 +107,6 @@ public class AnnouncementController {
     }
 
     @DeleteMapping("/{id}")
-    @VerifyToken
     public ResponseEntity<?> delete(@PathVariable(value="id") Long id) {
 
         Map<String,Object> response = new HashMap<>();

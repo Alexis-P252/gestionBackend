@@ -52,7 +52,7 @@ public class ProductController {
     }
 
     @PostMapping("")
-    @VerifyToken
+    //
     public ResponseEntity<?> create(@RequestBody Product product, BindingResult result) {
 
         Product newProduct = null;
@@ -82,7 +82,7 @@ public class ProductController {
         return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
     }
     @PutMapping("/{id}")
-    @VerifyToken
+    //
     public ResponseEntity<?> update(@RequestBody Product product,@PathVariable(value="id")Long id ) {
 
         Product currentProduct = productService.findById(id);
@@ -118,7 +118,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    @VerifyToken
+    //
     public ResponseEntity<?> delete(@PathVariable(value="id") Long id) {
 
         Map<String,Object> response = new HashMap<>();

@@ -45,7 +45,7 @@ public class VerifyTokenInterceptor implements HandlerInterceptor{
             }
             return true;
         }
-        // If @VerifyToken annotation is not present, continue
+        // If // annotation is not present, continue
         return true;
     }
 
